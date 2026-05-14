@@ -1,216 +1,131 @@
 # 📡 Comunicação SCI – TMS320F28379D + Python
 
-Projeto de comunicação serial entre o microcontrolador **TMS320F28379D** e um computador via protocolo SCI, utilizando **firmware em C (CCS)** e **interface de controle em Python (VSCode)**.
+Projeto de comunicação serial entre o microcontrolador **TMS320F28379D** e um computador via protocolo SCI. 
+Com o novo **Code Composer Studio (CCS) 20.5 (Theia)**, tanto o **firmware em C** quanto a **interface de controle em Python** podem ser gerenciados e executados diretamente no mesmo ambiente de desenvolvimento.
 
-Permite o **envio** e a **recepção** de inteiros (`int16_t`) usando um protocolo simples.
+Este projeto permite o **envio** e a **recepção** de inteiros (`int16_t`) entre o DSP e o PC.
 
 ---
 
 ## 🗂️ Estrutura do Projeto
 
-```
+```text
 sci_python/
-├── images/             # Imagens usadas no README
-│   └── VSCodePrint.png
-├── microcontroller/    # Projeto CCS para o TMS320F28379D
-│   ├── .project
-|   ├── ...
-│   └── main.c
-├── python/             # Código Python para executar no PC
-│   └── main.py
+├── images/             # Imagens e documentação visual
+├── microcontroller/    # Projeto C para o TMS320F28379D (CCS)
+│   ├── main.c          # Código principal com interrupções SCI
+│   └── sci.syscfg      # Configuração de pinos e periféricos
+├── python/             # Código Python para controle no PC
+│   └── main.py         # Script de interface serial
 └── README.md
+
 ```
 
 ---
 
 ## 🧰 Requisitos
 
-### PC (Python)
+### PC e IDE
 
-* Python 3.11 ou superior
-* Visual Studio Code (VSCode)
-* Extensão Python instalada no VSCode
-* Driver da porta COM (FTDI, XDS, etc.)
+* **Code Composer Studio (CCS) 20.5 ou superior (Theia)**.
+* **Python 3.11+** instalado e configurado no PATH do sistema.
+* Driver da porta COM (XDS100v2/v3, geralmente instalado com o CCS).
 
-### DSP (Firmware)
+### Hardware
 
-* Code Composer Studio (CCS) v12
-* Lauchpad 28379D
+* Launchpad **TMS320F28379D**.
+* Cabo USB para conexão e depuração.
 
 ---
 
-## 🔧 Passo a Passo
+## 🔧 Passo a Passo: Preparação
 
-### 1. Obter o Projeto (📌 Faça o Fork)
+### 1. Obter o Projeto (📌 Fork e Clone)
 
-1. Acesse:
-   👉 [`https://github.com/Pguilhermem/sci_python`](https://github.com/Pguilhermem/sci_python)
+1. Faça o **Fork** do repositório: [`https://github.com/Pguilhermem/sci_python`](https://github.com/Pguilhermem/sci_python).
+2. Abra o **CCS 20.5 (Theia)**.
+3. Use a funcionalidade de Git integrada:
+* Vá na aba **Source Control** (ícone de ramificação na lateral esquerda).
+* Clique em **Clone Repository**.
+* Insira a URL do seu fork e escolha a pasta local.
 
-2. Clique no botão `Fork`.
 
-3. Depois do fork, clone o repositório:
+4. Após o clone, adicione a pasta ao workspace se necessário: `File > Add Folder to Workspace...`.
+
+---
+
+## ⚙️ Parte 1 – Firmware (C/C++)
+
+1. No Explorer do CCS, expanda a pasta `microcontroller`.
+2. Compile e rode o projeto com **F5**.
+
+---
+
+## 🖥️ Parte 2 – Interface Python (Execução no CCS Theia)
+
+O CCS Theia permite rodar Python no terminal integrado.
+
+### 1. Configuração do Ambiente Virtual (Venv)
+
+Abra o terminal (`Terminal > New Terminal`) e execute:
 
 ```bash
-git clone https://github.com/seuusuario/sci_python.git
-cd sci_python
-```
-
-Substitua `seuusuario` pelo seu nome de usuário no GitHub.
-
----
-
-## ⚙️ Parte 1 – Executar Firmware no TMS320F28379D (CCS)
-
-### 1. Abrir o CCS e Importar o Projeto
-
-1. No CCS, vá em `File > Import...`.
-2. Selecione a opção:
-   ✅ `Code Composer Studio > CCS Projects`
-3. Em `Select Search-directory`, clique em `Browse...` e selecione a pasta:
-   `sci_python/microcontroller/`
-4. **Desmarque** a opção `Copy projects into workspace`.
-5. Clique em `Finish`.
-
-### 2. Compilar e Gravar o Código
-
-1. Conecte a placa ao PC.
-2. Vá em `Project > Build Project` ou clique no martelo (🔨).
-3. Vá em `Run > Debug` para carregar o firmware.
-4. Clique no botão `Resume (F8)` para rodar o código.
-
----
-
-## 🖥️ Parte 2 – Executar a Interface Python (VSCode)
-
-### 1. Abrir o Projeto no VSCode
-
-Abra a pasta do projeto no VSCode:
-
-- `Arquivo > Abrir Pasta...`  
-- Selecione a pasta onde está o script `main.py`
-
----
-
-### 3. Criar Ambiente Virtual
-
-Você pode criar o ambiente **graficamente ou pelo terminal**:
-
-#### ✅ Opção 1: Pelo VSCode (modo gráfico)
-
-1. Clique na aba inferior onde aparece o número da versão do Python (canto inferior direito do VSCode).
-2. Uma lista de ambientes será exibida. Clique em **"Criar Ambiente"** ou selecione **Python: Create Environment**.
-3. Escolha a opção **Venv** e aguarde a criação do ambiente virtual `.venv`.
-
-![Criação do ambiente virtual](images/VSCodePrint.png)
-
-#### 🧪 Opção 2: Pelo terminal (modo manual)
-
-Abra o terminal do VSCode:
-
-- Menu: `Terminal > Novo Terminal`
-- Ou atalho: `Ctrl + ` (Ctrl + acento grave)
-
-E execute:
-
-```bash
+cd python
 python -m venv .venv
+
 ```
 
-Ative o ambiente virtual:
+**Ative o ambiente:**
 
-- **Windows (cmd):**
-  ```bash
-  .venv\Scripts\activate
-  ```
+* **Windows:** `.\\.venv\\Scripts\\activate`
+* **Linux/macOS:** `source .venv/bin/activate`
 
-- **PowerShell:**
-  ```bash
-  .venv\Scripts\Activate.ps1
-  ```
+### 2. Instalação de Dependências
 
-- **Linux/macOS:**
-  ```bash
-  source .venv/bin/activate
-  ```
-
----
-
-### 4. Selecionar o Interpretador Python
-
-Após a criação do ambiente virtual:
-
-- Clique novamente no **número da versão do Python** no canto inferior direito do VSCode.
-- Selecione o Python localizado em `.venv`
-
----
-
-### 5. Instalar Dependências
-
-> **⚠️ Esta etapa deve ser feita com o terminal aberto e o ambiente virtual ativado.**
-
-1. Abra o terminal no VSCode:  
-   - Menu: `Terminal > Novo Terminal`  
-   - Ou atalho: `Ctrl + `
-
-2. Com o ambiente virtual ativo (deve aparecer algo como `(.venv)` no terminal), instale a biblioteca:
+Com a `.venv` ativa, instale o `pyserial`:
 
 ```bash
 pip install pyserial
+
 ```
 
-Se quiser congelar as dependências em um arquivo (opcional):
+### 3. Seleção do Interpretador
 
-```bash
-pip freeze > requirements.txt
-```
+Para evitar erros de edição, abra o `main.py`, clique na versão do Python na barra de status (canto inferior direito) e selecione o interpretador que está dentro da pasta `.venv`.
 
 ---
 
-### 6. Configurar a Porta Serial
+## ⚠️ Problemas Comuns ao Executar Python
 
-Edite a variável `SERIAL_PORT` no início do código:
+Caso encontre erros ao rodar o script, verifique os pontos abaixo:
 
-```python
-SERIAL_PORT = 'COM4'  # Altere para a porta COM do seu dispositivo
-```
+### 1. `ModuleNotFoundError: No module named 'serial'`
 
-No Windows, consulte a porta no **Gerenciador de Dispositivos > Portas (COM e LPT)**.
+* **Causa:** O script está tentando rodar sem o ambiente virtual ativo ou o `pyserial` não foi instalado na `.venv`.
+* **Solução:** Certifique-se de que o prefixo `(.venv)` aparece no terminal. Se não, ative o ambiente e rode `pip install pyserial` novamente.
 
----
+### 2. `PermissionError: [Errno 13] could not open port`
 
-### 7. Executar o Script
+* **Causa:** A porta COM já está aberta por outro programa.
+* **Solução:** Verifique se o **Terminal Serial** do próprio CCS ou outro software (como PuTTY) está conectado à mesma porta. Feche a conexão nesses programas antes de rodar o Python.
 
-No terminal (com o ambiente virtual ativado), execute:
+### 3. `FileNotFoundError: [Errno 2] could not open port 'COMX'`
 
-```bash
-python main.py
-```
+* **Causa:** O número da porta serial no código (`SERIAL_PORT`) está incorreto.
+* **Solução:** Abra o **Gerenciador de Dispositivos** (Windows), verifique em qual porta COM o "XDS100v2" está enumerado e atualize a variável no `main.py`.
 
----
+### 4. Erro de Script no PowerShell (Windows)
 
-## 💻 Interface do Programa
+* **Causa:** Políticas de execução do Windows impedem a ativação da `.venv`.
+* **Solução:** No terminal como Administrador, execute: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.
 
-Ao iniciar, o terminal exibirá o seguinte menu:
+### 5. Timeout ou Falha na Resposta
 
-```
------ MENU -----
-1. Enviar um numero inteiro para o 28379D
-2. Receber um numero inteiro do 28379D
-0. Sair
-```
-
----
-
-## ❗ Problemas Comuns
-
-- **Porta COM incorreta:** Verifique no Gerenciador de Dispositivos.
-- **Timeout:** Certifique-se de que o 28379D está ligado e com firmware SCI funcional.
-- **Permissão (Linux):** Pode ser necessário rodar `sudo usermod -a -G dialout $USER`.
+* **Causa:** O DSP está pausado no Debugger.
+* **Solução:** Verifique se você clicou em **Continue** no CCS. Se o programa estiver parado em um breakpoint, o Python não receberá dados.
 
 ---
 
 ## 📄 Licença
 
-Este projeto é livre para fins educacionais e de testes com o TMS320F28379D.
-
----
+Este projeto é livre para fins educacionais.
