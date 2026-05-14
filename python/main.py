@@ -2,6 +2,7 @@ import serial
 import struct
 import time
 
+
 # --- CONFIGURACOES ---
 # Altere esta para a porta COM correta do seu microcontrolador
 SERIAL_PORT = 'COM6'

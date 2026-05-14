@@ -1,0 +1,5 @@
+{
+    "python.envFile": "${workspaceFolder}/.venv",
+    "python.languageServer": "Pylance",
+    "python.terminal.activateEnvInCurrentTerminal": true
+}
