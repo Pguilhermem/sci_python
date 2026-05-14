@@ -4,7 +4,7 @@ import time
 
 # --- CONFIGURACOES ---
 # Altere esta para a porta COM correta do seu microcontrolador
-SERIAL_PORT = 'COM4'
+SERIAL_PORT = 'COM6'
 BAUD_RATE = 115200
 
 # --- DEFINICOES DO PROTOCOLO (devem ser identicas as do C) ---
@@ -22,6 +22,7 @@ def main():
         with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=2) as ser:
             print(f"Porta serial {SERIAL_PORT} aberta com sucesso a {BAUD_RATE} bps.")
             time.sleep(1) # Um pequeno tempo para a serial estabilizar
+            ser.flushInput() #limpa bytes remanescentes do buffer de entrada
 
             while True:
                 print("\n----- MENU -----")
@@ -76,6 +77,7 @@ def receive_int(ser_connection):
     Envia um comando para o microcontrolador solicitando um dado e depois o recebe.
     """
     try:
+        ser_connection.flushInput() #limpa bytes remanescentes do buffer de entrada
         # 1. Envia apenas o COMANDO para solicitar o dado.
         #    O pacote tera 3 bytes.
         request_packet = struct.pack('<Bh', CMD_SEND_INT, 0)
